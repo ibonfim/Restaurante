@@ -1,11 +1,11 @@
-import sqlite3
-from typing import Optional
+# import sqlite3
+# from typing import Optional
 
-from pydantic import BaseModel
+# from pydantic import BaseModel
 
-banco = sqlite3.connect('restaurante_banco.db')
+# banco = sqlite3.connect('restaurante_banco.db')
 
-cursor=banco.cursor()
+# cursor=banco.cursor()
  
 # cursor.execute("""
 #                     CREATE TABLE IF NOT EXISTS user (
@@ -13,6 +13,7 @@ cursor=banco.cursor()
 #                         id integer PRIMARY KEY autoincrement,
 #                         senha string,
 #                         endereco string,
+#                           CPF integer UNIQUE,
 #                         telefone integer UNIQUE
                         
 #                         )
@@ -33,7 +34,7 @@ cursor=banco.cursor()
 #                 CREATE TABLE IF NOT EXISTS cardapio (
 #                         nome string UNIQUE, 
 #                         id integer PRIMARY KEY autoincrement,
-#                         valor string 
+#                         valor DECIMAL 
 #                         )
                         
 #             """)
@@ -48,18 +49,8 @@ cursor=banco.cursor()
 
 
 
-class Cardapio(BaseModel):
-    name: str
-    valor: str
-   
-    
-dicionario = {
-    'nome': 'jorge',
-    'idade': 30
-}
 
+# banco.commit()
 
-banco.commit()
-
-# consulta=cursor.execute("SELECT * FROM user").fetchall()
-# print(consulta)
+# # consulta=cursor.execute("SELECT * FROM user").fetchall()
+# # print(consulta)
