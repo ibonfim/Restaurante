@@ -1,25 +1,13 @@
 import sqlite3
+from db.db import bdata
 
-DATABASE = 'restaurante_banco.db'
+db= bdata()
 
 class MenuRepository:
     
     def __init__(self):
-        self.conn=None
-        
-    def get_db(self):
-        if self.conn is None or not self.conn:
-           
-            self.conn = sqlite3.connect(DATABASE)
-            self.conn.row_factory = sqlite3.Row  # Retorna os resultados como dicionario
-      
-        return self.conn
-
-    def close_db(self):
-        if self.conn:
-            self.conn.close()
-            self.conn=None
-    
+        self.conn=db.get_db()
+        self.cursor= self.conn.cursor()
 
     def getCardapio(self,cursor):
         consulta=cursor.execute("SELECT * FROM cardapio").fetchall()
@@ -27,20 +15,22 @@ class MenuRepository:
         return [dict(row) for row in consulta]
         
         
-    def insertItemMenu(self,cursor,nome,valor):
+    def insertItemMenu(self,nome,valor):
         try:
-            cursor.execute("INSERT INTO cardapio (nome,valor) VALUES (?, ?)",(nome,valor))
+            
+            self.cursor.execute("INSERT INTO cardapio (nome,valor) VALUES (?, ?)",(nome,valor))
             self.conn.commit()
             return True
         except sqlite3.Error as e:
             print(f"Invalid Insertion: {e}")
             return False
         
-    def deleteItemMenu(self,cursor,id):
+    def deleteItemMenu(self,id):
         try:
-            cursor.execute("DELETE FROM cardapio WHERE id = ?",(id))
+             
+            self.cursor.execute("DELETE FROM cardapio WHERE id = ?",(id))
             self.conn.commit()
-            return cursor.rowcount > 0
+            return self.cursor.rowcount > 0
         except sqlite3.Error as e:
             print(f"Invalid Insertion: {e}")
             return False

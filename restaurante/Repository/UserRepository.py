@@ -1,33 +1,26 @@
 import sqlite3
+from db.db import bdata
 
-DATABASE = 'restaurante_banco.db'
+db= bdata()
+
 
 class UserRepository:
-    def __init__(self):
-        self.conn=None
-        
-        
-    def get_db(self):
-        if self.conn is None or not self.conn:
-            self.conn = sqlite3.connect(DATABASE)
-            self.conn.row_factory = sqlite3.Row  # Retorna os resultados como dicionario 
-        return self.conn
     
-
-    def close_db(self):
-        if self.conn:
-            self.conn.close()
-            self.conn=None
+    def __init__(self):
+        self.conn=db.get_db()
+        self.cursor= self.conn.cursor()
             
 
-    def getAllUsers(cursor):
-            consulta=cursor.execute("SELECT nome,endereco,telefone FROM user ").fetchall()
-            return consulta
+    def getAllUsers(self):
+        cursor = self.conn.cursor()
+        consulta=cursor.execute("SELECT nome,endereco,telefone FROM user ").fetchall()
+        return consulta
         
         
-    def insertUser(self,cursor,nome,cpf,endereco,telefone,senha):
+    def insertUser(self,nome,cpf,endereco,telefone,senha,usertype):
         try:
-            cursor.execute("INSERT INTO user (nome,cpf,endereco,telefone,senha) VALUES (?,?,?,?,?)",(nome,cpf,endereco,telefone,senha))
+            
+            self.cursor.execute("INSERT INTO user (nome,cpf,endereco,telefone,senha,usertype) VALUES (?,?,?,?,?,?)",(nome,cpf,endereco,telefone,senha,usertype))
             self.conn.commit()
             return True
         except sqlite3.Error as e:
@@ -35,11 +28,12 @@ class UserRepository:
             return False
         
             
-    def deleteUser(self,cursor,id):
+    def deleteUser(self,id):
         try:
-            cursor.execute("DELETE FROM user WHERE id = ?",(id))
+             
+            self.cursor.execute("DELETE FROM user WHERE id = ?",(id))
             self.conn.commit()
-            return cursor.rowcount > 0
+            return self.cursor.rowcount > 0
         except sqlite3.Error as e:
             print(f"Invalid Insertion: {e}")
             return False

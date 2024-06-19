@@ -5,7 +5,8 @@ from fastapi import Body
 from fastapi import APIRouter,HTTPException
 # Adicione o diretório principal ao sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+from db.db import bdata
+db=bdata()
 from Repository.MenuRepository import MenuRepository
 menuRepository = MenuRepository()
 
@@ -15,7 +16,7 @@ router = APIRouter()
 # Rota para o método GET
 @router.get("/menu")
 async def get_cardapio():
-    conn=menuRepository.get_db()
+    conn=db.get_db()
     cursor=conn.cursor()
     try:
         cardapio=menuRepository.getCardapio(cursor)
@@ -24,22 +25,23 @@ async def get_cardapio():
         else:
             raise HTTPException(status_code=404, detail="Menu not found")
     finally:
-        menuRepository.close_db()
+        db.close_db()
+        
         
 
 #Delegar apenas para admin qdo autenticação tiver pronta       
 @router.post("/insertmenu")
 async def insert_menu(nome: str = Body(...), valor: float = Body(...)):
-    conn = menuRepository.get_db()
-    cursor = conn.cursor()
+    
+     
     print(nome, valor)
     try:
-        if menuRepository.insertItemMenu(cursor, nome, valor):
+        if menuRepository.insertItemMenu(nome,valor):
             return "ok"
         else:
-            raise HTTPException(status_code=500, detail="Not Inserted Item")
+            raise HTTPException(status_code=409, detail="Not Inserted Item")
     finally:
-        menuRepository.close_db()
+        db.close_db()
         
         
 #Delegar apenas para admin qdo autenticação tiver pronta       
@@ -53,7 +55,7 @@ async def delete_item(id: str):
         else: 
             raise HTTPException(status_code = 400, detail = "Item not found")
     finally:
-        menuRepository.close_db()
+        db.close_db()
         
     
 
