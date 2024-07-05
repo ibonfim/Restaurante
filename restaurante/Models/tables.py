@@ -1,7 +1,4 @@
 import sqlite3
-from typing import Optional
-
-from pydantic import BaseModel
 
 banco = sqlite3.connect('restaurante_banco.db')
 

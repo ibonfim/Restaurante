@@ -11,7 +11,7 @@ class UserRepository:
         self.cursor= self.conn.cursor()
             
 
-    def getAllUsers(self):
+    def getAllUsers(self,cursor):
         cursor = self.conn.cursor()
         consulta=cursor.execute("SELECT nome,endereco,telefone FROM user ").fetchall()
         return consulta
