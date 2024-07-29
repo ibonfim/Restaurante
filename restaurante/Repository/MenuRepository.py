@@ -1,5 +1,7 @@
 import sqlite3
 from db.db import bdata
+from class_models.Class_models import Cardapio
+
 
 db= bdata()
 
@@ -15,10 +17,10 @@ class MenuRepository:
         return [dict(row) for row in consulta]
         
         
-    def insertItemMenu(self,nome,valor):
+    def insertItemMenu(self,cardapio:Cardapio):
         try:
             
-            self.cursor.execute("INSERT INTO cardapio (nome,valor) VALUES (?, ?)",(nome,valor))
+            self.cursor.execute("INSERT INTO cardapio (nome,valor) VALUES (?, ?)",(cardapio.nome,cardapio.valor))
             self.conn.commit()
             return True
         except sqlite3.Error as e:

@@ -8,6 +8,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from db.db import bdata
 db=bdata()
 from Repository.MenuRepository import MenuRepository
+from class_models.Class_models import Cardapio
+
 menuRepository = MenuRepository()
 
 router = APIRouter()
@@ -31,12 +33,12 @@ async def get_cardapio():
 
 #Delegar apenas para admin qdo autenticação tiver pronta       
 @router.post("/insertmenu")
-async def insert_menu(nome: str = Body(...), valor: float = Body(...)):
+async def insert_menu(cardapio: Cardapio = Body(...)):
     
      
-    print(nome, valor)
+     
     try:
-        if menuRepository.insertItemMenu(nome,valor):
+        if menuRepository.insertItemMenu(cardapio):
             return "ok"
         else:
             raise HTTPException(status_code=409, detail="Not Inserted Item")

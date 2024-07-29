@@ -1,5 +1,6 @@
 import sqlite3
 from db.db import bdata
+from class_models.Class_models import User
 
 db= bdata()
 
@@ -17,10 +18,10 @@ class UserRepository:
         return consulta
         
         
-    def insertUser(self,nome,cpf,endereco,telefone,senha,usertype):
+    def insertUser(self,user:User):
         try:
             
-            self.cursor.execute("INSERT INTO user (nome,cpf,endereco,telefone,senha,usertype) VALUES (?,?,?,?,?,?)",(nome,cpf,endereco,telefone,senha,usertype))
+            self.cursor.execute("INSERT INTO user (nome,cpf,endereco,telefone,senha,usertype) VALUES (?,?,?,?,?,?)",(user.nome,user.CPF,user.endereco,user.telefone,user.senha,user.usertype))
             self.conn.commit()
             return True
         except sqlite3.Error as e:

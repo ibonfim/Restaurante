@@ -5,6 +5,7 @@ from fastapi import APIRouter, Body, HTTPException
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Repository.UserRepository import UserRepository
 from db.db import bdata
+from class_models.Class_models import User
 
 db=bdata()
 userRepository= UserRepository()
@@ -29,10 +30,10 @@ async def get_users():
         
 #Delegar apenas para admin qdo autenticação tiver pronta        
 @router.post("/insertuser")
-async def insert_menu(nome: str = Body(...), cpf: int = Body(...),endereco: str= Body(...),telefone: int =Body(...),senha: str =Body(...),usertype: str=Body(...)):
+async def insert_menu(user: User = Body(...)):
     
     try:
-        if userRepository.insertUser(nome,cpf,endereco,telefone,senha,usertype):
+        if userRepository.insertUser(user):
             return "Created User"
         else:
             raise HTTPException(status_code=409, detail="User not created because already exists")
