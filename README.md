@@ -32,3 +32,5 @@ Em comum:
 - GET /cardapio [OK]
 - POST /login
 - POST-GET /chat
+
+Estrutura banco de dados
