@@ -33,4 +33,4 @@ Em comum:
 - POST /login
 - POST-GET /chat
 
-Estrutura banco de dados
+Estrutura banco de dados:
